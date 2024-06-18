@@ -21,6 +21,13 @@ classifiers = [s.strip() for s in classes.split('\n') if s]
 
 description = ('Deep Sequence Alignments.')
 
+extra_requires = {
+    'train' : [
+        'tensorboard',
+        'biopython>=1.78,<2.0',
+    ]
+}
+
 
 setup(name='deepblast',
       version='1.0.3',
@@ -38,11 +45,9 @@ setup(name='deepblast',
           'numba',
           'pytorch-lightning>=0.8.1',
           'matplotlib',
-          'pillow',
-          'biopython>=1.78,<2.0',
           'transformers',
           'sentencepiece',
-          'tensorboard'
+          'pillow'
       ],
       scripts=glob('scripts/*'),
       classifiers=classifiers,
