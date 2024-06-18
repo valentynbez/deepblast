@@ -51,7 +51,7 @@ def load_model(model_path, pretrain_path=None, lm=None, tokenizer=None,
     model = DeepBLAST(layers=8,
                       alignment_mode=alignment_mode, dropout=0.5,
                       device=device)
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location=device))
 
     model.tokenizer = tokenizer
     model.aligner.lm = lm
