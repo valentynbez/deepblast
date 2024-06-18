@@ -87,10 +87,21 @@ class NeuralAligner(nn.Module):
            Representation of a single protein sequence
            with dimensions B x (N + 2) x D
         """
-        with torch.no_grad():
-            embedding = self.lm(input_ids=x,
-                                attention_mask=None)
-            hx = embedding[0]
+        try:
+            with torch.no_grad():
+                embedding = self.lm(input_ids=x,
+                                    attention_mask=None)
+                hx = embedding[0]
+        # hack for ONNX
+        except TypeError:
+            onnx_input = {
+                self.lm.get_inputs()[0].name:
+                inp["input_ids"].cpu().numpy(),
+                self.lm.get_inputs()[1].name:
+                inp["attention_mask"].cpu().numpy()
+            }
+            hx = self.model.run(["last_hidden_state"], onnx_input)[0]
+
 
         zx = self.match_embedding(hx)
         gx = self.gap_embedding(hx)
