@@ -96,11 +96,13 @@ class NeuralAligner(nn.Module):
         except TypeError:
             onnx_input = {
                 self.lm.get_inputs()[0].name:
-                inp["input_ids"].cpu().numpy(),
+                x.cpu().numpy(),
                 self.lm.get_inputs()[1].name:
-                inp["attention_mask"].cpu().numpy()
+                torch.ones(x.shape[0], x.shape[1], dtype=torch.int64).cpu().numpy()
             }
-            hx = self.model.run(["last_hidden_state"], onnx_input)[0]
+            hx = self.lm.run(["last_hidden_state"], onnx_input)[0]
+            # convert to tensor
+            hx = torch.tensor(hx, device=x.device)
 
 
         zx = self.match_embedding(hx)
