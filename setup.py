@@ -47,7 +47,9 @@ setup(name='deepblast',
           'matplotlib',
           'transformers',
           'sentencepiece',
-          'pillow'
+          'pillow',
+          'biopython',
+          'tensorboard'
       ],
       scripts=glob('scripts/*'),
       classifiers=classifiers,
